@@ -20,3 +20,4 @@ public class ShootingController : MonoBehaviour
         bullet.Initialize(bulletSpeed);
     }
 }
+//проверка связи
