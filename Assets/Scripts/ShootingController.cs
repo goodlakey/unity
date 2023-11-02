@@ -16,7 +16,7 @@ public class ShootingController : MonoBehaviour
     void Shoot()
     {
         GameObject Bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Bullet_Movement bullet = Bullet.GetComponent<Bullet_Movement>();
+        BulletMovement bullet = Bullet.GetComponent<BulletMovement>();
         bullet.Initialize(bulletSpeed);
     }
 }
