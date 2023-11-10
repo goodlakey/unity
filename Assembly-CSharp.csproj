@@ -67,12 +67,12 @@
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\PoolingController.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\DirectMoving.cs" />
     <Compile Include="Assets\Scripts\Enemy_Health.cs" />
-    <Compile Include="Assets\Scripts\Enemy_Health - Copy.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\PlayerMoving.cs" />
     <Compile Include="Assets\Scripts\Bullet_Damage.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\PlayerShooting.cs" />
     <Compile Include="Assets\Samples\Supercyan Character Pack Zombie Sample\Scripts\ZombieFree.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\Bonus.cs" />
+    <Compile Include="Assets\Scripts\New_spawn.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\FollowThePath.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\Player.cs" />
     <Compile Include="Assets\Space Shooter Template FREE\Scripts\Wave.cs" />
