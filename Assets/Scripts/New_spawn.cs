@@ -8,20 +8,28 @@ public class EnemySpawn : MonoBehaviour
     public Vector3 spawnPointCoordinates1; //  оординаты точки по€влени€ противников
     public Vector3 spawnPointCoordinates2; //  оординаты точки по€влени€ противников
     public Vector3 spawnPointCoordinates3; //  оординаты точки по€влени€ противников
+    public Vector3 spawnPointCoordinates4; //  оординаты точки по€влени€ противников
+    public Vector3 spawnPointCoordinates5; //  оординаты точки по€влени€ противников
     public float spawnInterval = 2.0f; // »нтервал времени между генерацией
+    public int enemiesPerSpawn = 10;
 
     void Start()
     {
         StartCoroutine(SpawnEnemies1());
         StartCoroutine(SpawnEnemies2());
         StartCoroutine(SpawnEnemies3());
+        StartCoroutine(SpawnEnemies4());
+        StartCoroutine(SpawnEnemies5());
     }
 
     IEnumerator SpawnEnemies1()
     {
         while (true)
         {
-            Instantiate(enemyPrefab, spawnPointCoordinates1, Quaternion.identity); // »спользуем координаты точки по€влени€
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                Instantiate(enemyPrefab, spawnPointCoordinates1, Quaternion.identity); // »спользуем координаты точки по€влени€
+            }
             yield return new WaitForSeconds(spawnInterval);
         }
     }
@@ -30,7 +38,10 @@ public class EnemySpawn : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(enemyPrefab, spawnPointCoordinates2, Quaternion.identity); // »спользуем координаты точки по€влени€
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                Instantiate(enemyPrefab, spawnPointCoordinates2, Quaternion.identity); // »спользуем координаты точки по€влени€
+            }
             yield return new WaitForSeconds(spawnInterval);
         }
     }
@@ -39,7 +50,34 @@ public class EnemySpawn : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(enemyPrefab, spawnPointCoordinates3, Quaternion.identity); // »спользуем координаты точки по€влени€
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                Instantiate(enemyPrefab, spawnPointCoordinates3, Quaternion.identity); // »спользуем координаты точки по€влени€
+            }
+            yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+    
+    IEnumerator SpawnEnemies4()
+    {
+        while (true)
+        {
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                Instantiate(enemyPrefab, spawnPointCoordinates4, Quaternion.identity); // »спользуем координаты точки по€влени€
+            }
+            yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+    
+    IEnumerator SpawnEnemies5()
+    {
+        while (true)
+        {
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                Instantiate(enemyPrefab, spawnPointCoordinates5, Quaternion.identity); // »спользуем координаты точки по€влени€
+            }
             yield return new WaitForSeconds(spawnInterval);
         }
     }
