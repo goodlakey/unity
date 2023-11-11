@@ -1,35 +1,38 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
     public string playerTag = "Player"; // Тег игрока
-    public float moveSpeed = 5.0f; // Скорость движения противника
     private Transform player;
+    private NavMeshAgent navMeshAgent;
+
+    void Start()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        FindPlayer();
+    }
 
     void Update()
     {
-
-        if (player == null)
+        if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled && player != null)
         {
-            // Ищем игрока по тегу
-            GameObject playerObject = GameObject.FindWithTag(playerTag);
-
-            if (playerObject != null)
-            {
-                player = playerObject.transform;
-            }
+            navMeshAgent.SetDestination(player.position);
         }
-
-        if (player != null)
+        else
         {
-            // Вычисляем направление к игроку
-            Vector3 direction = (player.position - transform.position).normalized;
+            FindPlayer();
+        }
+    }
 
-            // Перемещаем противника в направлении игрока
-            transform.position += direction * moveSpeed * Time.deltaTime;
+    void FindPlayer()
+    {
+        // Ищем игрока по тегу
+        GameObject playerObject = GameObject.FindGameObjectWithTag(playerTag);
 
-            // Если нужно, вы также можете использовать поворот, чтобы противник смотрел в сторону игрока
-            transform.rotation = Quaternion.LookRotation(direction);
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
         }
     }
 }
