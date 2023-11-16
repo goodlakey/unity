@@ -16,6 +16,7 @@ TagManager:
   - Rocket
   - Bullet
   - FirstPoint
+  - LastPoint
   layers:
   - Default
   - TransparentFX

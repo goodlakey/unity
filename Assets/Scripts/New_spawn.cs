@@ -1,90 +1,3 @@
-/*using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
-
-public class EnemySpawn : MonoBehaviour
-{
-    public GameObject enemyPrefab; // Префаб врага
-    public Vector3 spawnPointCoordinates1; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates2; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates3; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates4; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates5; // Координаты точки появления противников
-    public float spawnInterval = 2.0f; // Интервал времени между генерацией
-    public int enemiesPerSpawn = 10;
-
-    void Start()
-    {
-        StartCoroutine(SpawnEnemies1());
-        StartCoroutine(SpawnEnemies2());
-        StartCoroutine(SpawnEnemies3());
-        StartCoroutine(SpawnEnemies4());
-        StartCoroutine(SpawnEnemies5());
-    }
-
-    IEnumerator SpawnEnemies1()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates1, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-
-    IEnumerator SpawnEnemies2()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates2, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-
-    IEnumerator SpawnEnemies3()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates3, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-    
-    IEnumerator SpawnEnemies4()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates4, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-    
-    IEnumerator SpawnEnemies5()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates5, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-
-
-}*/
-
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
@@ -92,97 +5,89 @@ using System.Collections;
 public class EnemySpawn : MonoBehaviour
 {
     public GameObject enemyPrefab; // Префаб врага
-    public Vector3 spawnPointCoordinates1; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates2; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates3; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates4; // Координаты точки появления противников
-    public Vector3 spawnPointCoordinates5; // Координаты точки появления противников
-    public float spawnInterval = 2.0f; // Интервал времени между генерацией
-    public int enemiesPerSpawn = 10;
+    public Vector3[] spawnPointCoordinates; // Координаты точек появления противников
+    public float groupSpawnInterval = 2.0f; // Интервал времени между группами
+    public int enemiesPerGroup = 10;
+    public float circleRadius = 1.0f; // Радиус круговой группы
 
     void Start()
     {
-        StartCoroutine(SpawnEnemies1());
-        StartCoroutine(SpawnEnemies2());
-        StartCoroutine(SpawnEnemies3());
-        StartCoroutine(SpawnEnemies4());
-        StartCoroutine(SpawnEnemies5());
+        StartCoroutine(SpawnEnemyGroups());
     }
 
-    IEnumerator SpawnEnemies1()
+    IEnumerator SpawnEnemyGroups()
     {
         while (true)
         {
-            for (int i = 0; i < enemiesPerSpawn; i++)
+            foreach (Vector3 spawnPoint in spawnPointCoordinates)
             {
-                Instantiate(enemyPrefab, spawnPointCoordinates1, Quaternion.identity); // Используем координаты точки появления
+                GameObject groupLeader = SpawnGroupAtLocation(spawnPoint);
+
+                // Находим центральную точку для группы
+                Vector3 groupCenter = CalculateGroupCenter(groupLeader, enemiesPerGroup);
+
+                // Назначаем цель движения каждому врагу в группе
+                SetGroupDestination(groupLeader, groupCenter);
+
+                yield return null; // Ждем один кадр перед следующей группой
             }
-            yield return new WaitForSeconds(spawnInterval);
+
+            yield return new WaitForSeconds(groupSpawnInterval);
         }
     }
 
-    IEnumerator SpawnEnemies2()
+    GameObject SpawnGroupAtLocation(Vector3 spawnPoint)
     {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates2, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
+        float angleStep = 360f / enemiesPerGroup;
 
-    IEnumerator SpawnEnemies3()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates3, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
+        // Создаем пустой объект, который будет служить лидером группы
+        GameObject groupLeader = new GameObject("GroupLeader");
+        groupLeader.transform.position = spawnPoint;
 
-    IEnumerator SpawnEnemies4()
-    {
-        while (true)
+        for (int i = 0; i < enemiesPerGroup; i++)
         {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates4, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
+            float angle = i * angleStep;
+            float spawnX = spawnPoint.x + Mathf.Sin(Mathf.Deg2Rad * angle) * circleRadius;
+            float spawnZ = spawnPoint.z + Mathf.Cos(Mathf.Deg2Rad * angle) * circleRadius;
+            Vector3 enemySpawnPosition = new Vector3(spawnX, spawnPoint.y, spawnZ);
 
-    IEnumerator SpawnEnemies5()
-    {
-        while (true)
-        {
-            for (int i = 0; i < enemiesPerSpawn; i++)
-            {
-                Instantiate(enemyPrefab, spawnPointCoordinates5, Quaternion.identity); // Используем координаты точки появления
-            }
-            yield return new WaitForSeconds(spawnInterval);
-        }
-    }
-    void SpawnGroupAtLocation(Vector3 spawnPoint)
-    {
-        for (int i = 0; i < enemiesPerSpawn; i++)
-        {
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
+            GameObject enemy = Instantiate(enemyPrefab, enemySpawnPosition, Quaternion.identity);
+
+            // Добавляем врага к родителю (лидеру группы)
+            enemy.transform.parent = groupLeader.transform;
 
             // Добавим следующие строки, чтобы предотвратить подпрыгивание и разлетание
             NavMeshAgent navMeshAgent = enemy.GetComponent<NavMeshAgent>();
             if (navMeshAgent != null)
             {
                 navMeshAgent.enabled = false;
-                enemy.transform.position = spawnPoint;
+                enemy.transform.position = enemySpawnPosition;
                 navMeshAgent.enabled = true;
             }
         }
+
+        return groupLeader;
     }
 
+    Vector3 CalculateGroupCenter(GameObject groupLeader, int groupSize)
+    {
+        // Находим центральную точку для группы, используя позицию лидера и размер группы
+        Vector3 groupCenter = groupLeader.transform.position;
+        groupCenter.y = groupLeader.transform.position.y; // Может потребоваться коррекция высоты в будущем
+
+        return groupCenter;
+    }
+
+    void SetGroupDestination(GameObject groupLeader, Vector3 groupCenter)
+    {
+        // Устанавливаем цель движения каждого врага в группе на центральную точку группы
+        foreach (Transform enemyTransform in groupLeader.transform)
+        {
+            NavMeshAgent navMeshAgent = enemyTransform.GetComponent<NavMeshAgent>();
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.SetDestination(groupCenter);
+            }
+        }
+    }
 }
