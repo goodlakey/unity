@@ -15,6 +15,8 @@ TagManager:
   - PlayerRay
   - Rocket
   - Bullet
+  - FirstPoint
+  - LastPoint
   layers:
   - Default
   - TransparentFX
