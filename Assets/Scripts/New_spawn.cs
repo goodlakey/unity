@@ -8,7 +8,7 @@ public class EnemySpawn : MonoBehaviour
     public Vector3[] spawnPointCoordinates; // Координаты точек появления противников
     public float groupSpawnInterval = 2.0f; // Интервал времени между группами
     public int enemiesPerGroup = 10;
-    public float circleRadius = 1.0f; // Радиус круговой группы
+    public float circleRadius = 0.9f; // Радиус круговой группы
 
     void Start()
     {

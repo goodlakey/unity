@@ -828,6 +828,10 @@
       <Project>{CBCE6227-E1B1-6629-34D5-09A6470D04B9}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{564E23E3-AEC0-56C3-7C98-19C5650A31B0}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
